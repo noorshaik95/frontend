@@ -1,0 +1,16 @@
+<div class="container mt-5">
+  <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+    <span class="error-message">{{errorMessage}}</span>
+    <div class="form-group">
+      <input type="text" class="form-control" name="email" formControlName="username" placeholder="Username" />
+      <span class="error-message" *ngIf="!loginForm.get('username').valid && loginForm.get('username').touched" >Enter valid Username</span><br>
+    </div>
+    <div class="form-group">
+      <input type="password" class="form-control" name="password" [formControlName]="'password'" placeholder="Password"/>
+      <span class="error-message" *ngIf="!loginForm.get('password').valid && loginForm.get('password').touched" >Enter Password</span><br>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!loginForm.valid" >Login</button>
+    </div>
+  </form>
+</div>

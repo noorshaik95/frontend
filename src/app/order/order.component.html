@@ -1,0 +1,109 @@
+<div class="container">
+  <div class="row">
+    <div class="col text-right mt-5">
+      <button class="btn btn-primary mr-2" (click)="addNew(content)">Add New</button>
+      <button class="btn btn-danger" (click)="logout()">Log Out</button>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <table class="table table-stripped">
+      <thead>
+      <tr>
+        <th *ngFor="let header of headers" scope="colgroup">{{header}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let order of orders; let i = index">
+        <th>{{order.orderNumber}}</th>
+        <td>{{order.orderDueDate | date}}</td>
+        <td>{{order.customerBuyerName}}</td>
+        <td>{{order.customerAddress}}</td>
+        <td>{{order.customerPhoneNumber}}</td>
+        <th>{{order.orderTotal | currency}}</th>
+        <td>
+          <fa-icon class="mr-2" (click)= "openEditForm(content, i)" [icon]="faPencilAlt"></fa-icon>
+          <fa-icon  (click)="deleteOrder(i)" [icon]="faTrash"></fa-icon>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{formType}} Order</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="orderForm">
+      <div class="form-group">
+        <label for="customerBuyerName">Customer Buyer Name<span class="text-danger">&#42;</span></label>
+        <div class="input-group">
+          <input id="customerBuyerName" class="form-control" formControlName="customerBuyerName">
+        </div>
+        <span class="error-message" *ngIf="orderForm.get('customerBuyerName').hasError('required') && (orderForm.get('customerBuyerName').touched)">
+            Buyer Name is required.
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="customerPhoneNumber">Customer Phone Number<span class="text-danger">&#42;</span></label>
+        <div class="input-group">
+          <input appOnlyNumbers id="customerPhoneNumber" class="form-control" formControlName="customerPhoneNumber">
+        </div>
+        <span class="error-message" *ngIf="orderForm.get('customerPhoneNumber').hasError('required') && (orderForm.get('customerPhoneNumber').touched)">
+            Phone Number is required.
+        </span>
+        <span class="error-message" *ngIf="orderForm.get('customerPhoneNumber').hasError('pattern') && !orderForm.get('customerPhoneNumber').hasError('required') && (orderForm.get('customerPhoneNumber').touched)">
+            Enter valid Phone Number.
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="orderNumber">Order Number<span class="text-danger">&#42;</span></label>
+        <div class="input-group">
+          <input id="orderNumber" class="form-control" formControlName="orderNumber">
+        </div>
+        <span class="error-message" *ngIf="orderForm.get('orderNumber').hasError('required') && (orderForm.get('orderNumber').touched)">
+            Order Number is required.
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="orderTotal">Order Total<span class="text-danger">&#42;</span></label>
+        <div class="input-group">
+          <input appOnlyNumbers id="orderTotal" class="form-control" formControlName="orderTotal">
+        </div>
+        <span class="error-message" *ngIf="orderForm.get('orderTotal').hasError('required') && (orderForm.get('orderTotal').touched)">
+            Order Total is required.
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="customerAddress">Customer Address<span class="text-danger">&#42;</span></label>
+        <div class="input-group">
+          <input id="customerAddress" class="form-control" formControlName="customerAddress">
+        </div>
+        <span class="error-message" *ngIf="orderForm.get('customerAddress').hasError('required') && (orderForm.get('customerAddress').touched)">
+            Address is required.
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="orderDate">Order Date<span class="text-danger">&#42;</span></label>
+        <div class="input-group">
+          <input id="orderDate" class="form-control" formControlName="orderDueDate" placeholder="yyyy-mm-dd" name="dp"
+                 ngbDatepicker #dp="ngbDatepicker">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" (click)="dp.toggle()" type="button">calendar</button>
+          </div>
+        </div>
+        <span class="error-message" *ngIf="orderForm.get('orderDueDate').hasError('required') && (orderForm.get('orderDueDate').touched)">
+            Order Due Date is required.
+        </span>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" [disabled]="orderForm.invalid" (click)="submitForm()">Save
+    </button>
+  </div>
+</ng-template>
